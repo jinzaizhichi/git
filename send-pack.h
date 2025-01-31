@@ -6,6 +6,7 @@
 struct child_process;
 struct oid_array;
 struct ref;
+struct repository;
 
 /* Possible values for push_cert field in send_pack_args. */
 #define SEND_PACK_PUSH_CERT_NEVER 0
@@ -26,7 +27,8 @@ struct send_pack_args {
 		/* One of the SEND_PACK_PUSH_CERT_* constants. */
 		push_cert:2,
 		stateless_rpc:1,
-		atomic:1;
+		atomic:1,
+		disable_bitmaps:1;
 	const struct string_list *push_options;
 };
 
@@ -34,7 +36,7 @@ struct option;
 int option_parse_push_signed(const struct option *opt,
 			     const char *arg, int unset);
 
-int send_pack(struct send_pack_args *args,
+int send_pack(struct repository *r, struct send_pack_args *args,
 	      int fd[], struct child_process *conn,
 	      struct ref *remote_refs, struct oid_array *extra_have);
 

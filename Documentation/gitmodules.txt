@@ -43,9 +43,9 @@ submodule.<name>.update::
 	command in the superproject. This is only used by `git
 	submodule init` to initialize the configuration variable of
 	the same name. Allowed values here are 'checkout', 'rebase',
-	'merge' or 'none'. See description of 'update' command in
-	linkgit:git-submodule[1] for their meaning. For security
-	reasons, the '!command' form is not accepted here.
+	'merge' or 'none', but not '!command' (for security reasons).
+	See the description of the 'update' command in
+	linkgit:git-submodule[1] for more details.
 
 submodule.<name>.branch::
 	A remote branch name for tracking updates in the upstream submodule.
@@ -98,6 +98,14 @@ submodule.<name>.shallow::
 	shallow clone (with a history depth of 1) unless the user explicitly
 	asks for a non-shallow clone.
 
+NOTES
+-----
+
+Git does not allow the `.gitmodules` file within a working tree to be a
+symbolic link, and will refuse to check out such a tree entry. This
+keeps behavior consistent when the file is accessed from the index or a
+tree versus from the filesystem, and helps Git reliably enforce security
+checks of the file contents.
 
 EXAMPLES
 --------

@@ -1,12 +1,12 @@
-#include "cache.h"
+#define DISABLE_SIGN_COMPARE_WARNINGS
+
+#include "git-compat-util.h"
 #include "json-writer.h"
 
 void jw_init(struct json_writer *jw)
 {
-	strbuf_init(&jw->json, 0);
-	strbuf_init(&jw->open_stack, 0);
-	jw->need_comma = 0;
-	jw->pretty = 0;
+	struct json_writer blank = JSON_WRITER_INIT;
+	memcpy(jw, &blank, sizeof(*jw));;
 }
 
 void jw_release(struct json_writer *jw)
@@ -48,10 +48,7 @@ static void append_quoted_string(struct strbuf *out, const char *in)
 
 static void indent_pretty(struct json_writer *jw)
 {
-	int k;
-
-	for (k = 0; k < jw->open_stack.len; k++)
-		strbuf_addstr(&jw->json, "  ");
+	strbuf_addstrings(&jw->json, "  ", jw->open_stack.len);
 }
 
 /*

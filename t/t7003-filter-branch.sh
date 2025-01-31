@@ -49,7 +49,7 @@ test_expect_success 'result is really identical' '
 test_expect_success 'rewrite bare repository identically' '
 	(git config core.bare true && cd .git &&
 	 git filter-branch branch > filter-output 2>&1 &&
-	! fgrep fatal filter-output)
+	! grep fatal filter-output)
 '
 git config core.bare false
 test_expect_success 'result is really identical' '
@@ -395,7 +395,7 @@ test_expect_success '--prune-empty is able to prune root commit' '
 test_expect_success '--prune-empty is able to prune entire branch' '
 	git branch prune-entire B &&
 	git filter-branch -f --prune-empty --index-filter "git update-index --remove A.t B.t" prune-entire &&
-	test_path_is_missing .git/refs/heads/prune-entire &&
+	test_must_fail git rev-parse refs/heads/prune-entire &&
 	test_must_fail git reflog exists refs/heads/prune-entire
 '
 
@@ -503,7 +503,7 @@ test_expect_success 'rewrite repository including refs that point at non-commit 
 	git tag -a -m "tag to a tree" treetag $new_tree &&
 	git reset --hard HEAD &&
 	git filter-branch -f -- --all >filter-output 2>&1 &&
-	! fgrep fatal filter-output
+	! grep fatal filter-output
 '
 
 test_expect_success 'filter-branch handles ref deletion' '

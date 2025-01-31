@@ -5,6 +5,7 @@ test_description="Test whether cache-tree is properly updated
 Tests whether various commands properly update and/or rewrite the
 cache-tree extension.
 "
+
  . ./test-lib.sh
 
 cmp_cache_tree () {
@@ -195,6 +196,7 @@ test_expect_success 'reset --hard gives cache-tree' '
 
 test_expect_success 'reset --hard without index gives cache-tree' '
 	rm -f .git/index &&
+	git clean -fd &&
 	git reset --hard &&
 	test_cache_tree
 '
